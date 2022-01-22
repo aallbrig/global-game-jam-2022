@@ -10,7 +10,7 @@ namespace Tests.PlayMode.SceneTests
     {
         private const string TargetScene = "Pillar of Autumn";
 
-        public static string[] ExpectedGameElements = 
+        public static string[] ExpectedGameElements =
         {
             "Player"
         };

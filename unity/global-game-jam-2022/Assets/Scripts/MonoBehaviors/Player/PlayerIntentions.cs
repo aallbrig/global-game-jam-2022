@@ -23,17 +23,18 @@ namespace MonoBehaviors.Player
             InputManager.TapOccurred += HandleTap;
         }
 
-        private void HandleTap(TouchInteraction end)
-        {
-            if (PlayerService.DetectInteractable(Camera.ScreenPointToRay(end.position), out var interactable)) PlayerService.Interact(interactable);
-        }
-
-        private void HandleSwipe(Swipe swipe) => PlayerService.ConstantLocomotion(swipe.vectorNormalized);
-
         private void OnDisable()
         {
             InputManager.SwipeOccurred -= HandleSwipe;
             InputManager.TapOccurred -= HandleTap;
         }
+
+        private void HandleTap(TouchInteraction end)
+        {
+            if (PlayerService.DetectInteractable(Camera.ScreenPointToRay(end.position), out var interactable))
+                PlayerService.Interact(interactable);
+        }
+
+        private void HandleSwipe(Swipe swipe) => PlayerService.ConstantLocomotion(swipe.vectorNormalized);
     }
 }

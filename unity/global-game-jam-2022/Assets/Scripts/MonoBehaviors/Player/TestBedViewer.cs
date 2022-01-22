@@ -51,7 +51,8 @@ namespace MonoBehaviors.Player
         private void EmitIntention()
         {
             if (swipe.distance > 1) PlayerService.ConstantLocomotion(swipe.vectorNormalized);
-            if (PlayerService.DetectInteractable(Camera.ScreenPointToRay(end.position), out var interactable)) PlayerService.Interact(interactable);
+            if (PlayerService.DetectInteractable(Camera.ScreenPointToRay(end.position), out var interactable))
+                PlayerService.Interact(interactable);
         }
     }
 }

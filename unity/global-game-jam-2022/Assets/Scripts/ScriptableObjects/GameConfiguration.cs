@@ -14,6 +14,7 @@ namespace ScriptableObjects
     {
         public string url;
     }
+
     [CreateAssetMenu(fileName = "New game configuration", menuName = "GGJ22/GameConfiguration", order = 0)]
     public class GameConfiguration : ScriptableObject
     {

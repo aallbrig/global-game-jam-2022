@@ -9,11 +9,6 @@ namespace MonoBehaviors
 {
     public class InputManager : MonoBehaviour
     {
-        public static event Action<Swipe> SwipeOccurred;
-        public static event Action<TouchInteraction> TapOccurred;
-
-        public static void TriggerSwipe(Swipe swipe) => SwipeOccurred?.Invoke(swipe);
-        public static void TriggerTap(TouchInteraction end) => TapOccurred?.Invoke(end);
         [SerializeField] private TouchInteraction end;
         [SerializeField] private TouchInteraction start;
         [SerializeField] private Swipe swipe;
@@ -44,6 +39,13 @@ namespace MonoBehaviors
             _controls.Gameplay.Press.canceled -= OnTouchInteractionStopped;
             _controls.Disable();
         }
+
+        public static event Action<Swipe> SwipeOccurred;
+
+        public static event Action<TouchInteraction> TapOccurred;
+
+        public static void TriggerSwipe(Swipe swipe) => SwipeOccurred?.Invoke(swipe);
+        public static void TriggerTap(TouchInteraction end) => TapOccurred?.Invoke(end);
 
         private void OnTouchInteractionStarted(InputAction.CallbackContext context) =>
             start = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());

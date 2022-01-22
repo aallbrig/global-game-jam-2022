@@ -7,7 +7,7 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.MonoBehaviours.UI
 {
-    public class SpyMainMenuInteractions: IMainMenuInteractions
+    public class SpyMainMenuInteractions : IMainMenuInteractions
     {
         public Action OnStartGame = () => {};
         public Action OnViewSource = () => {};

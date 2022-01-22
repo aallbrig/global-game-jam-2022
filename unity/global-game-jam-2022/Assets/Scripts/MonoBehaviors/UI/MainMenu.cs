@@ -7,6 +7,7 @@ namespace MonoBehaviors.UI
         public void StartGame();
         public void ViewSource();
     }
+
     public class MainMenu : MonoBehaviour
     {
         public IMainMenuInteractions Interactions;

@@ -5,7 +5,6 @@ using MonoBehaviors;
 using MonoBehaviors.Player;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Input
@@ -16,13 +15,12 @@ namespace Tests.PlayMode.Input
     public class SpyPlayerServices : IPlayerVerbProvider
     {
         public Action<Vector2> OnConstantLocomotion;
+        public Action<Ray> OnDetectInteractable;
         public Action<IPlayerInteractable> OnInteract;
         public Action<Vector3> OnMoveToLocation;
-        public Action<Ray> OnDetectInteractable;
         public IPlayerInteractable PlayerInteractable;
 
         public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
-        public void MoveToLocation(Vector3 destination) => OnMoveToLocation?.Invoke(destination);
         public void Interact(IPlayerInteractable playerInteractable) => OnInteract?.Invoke(playerInteractable);
         public bool DetectInteractable(Ray screenPointToRay, out IPlayerInteractable playerInteractable)
         {
@@ -30,6 +28,7 @@ namespace Tests.PlayMode.Input
             OnDetectInteractable?.Invoke(screenPointToRay);
             return true;
         }
+        public void MoveToLocation(Vector3 destination) => OnMoveToLocation?.Invoke(destination);
     }
 
     public class PlayerIntentionTests
@@ -42,7 +41,7 @@ namespace Tests.PlayMode.Input
             var spy = new SpyPlayerServices {OnConstantLocomotion = _ => called = true};
             sut.PlayerService = spy;
             yield return null;
-            
+
             InputManager.TriggerSwipe(Swipe.Of(TouchInteraction.Of(Vector2.up), TouchInteraction.Of(Vector2.down)));
 
             Assert.IsTrue(called);
