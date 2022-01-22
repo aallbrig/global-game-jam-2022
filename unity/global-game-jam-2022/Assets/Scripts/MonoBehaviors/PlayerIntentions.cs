@@ -11,19 +11,27 @@ namespace MonoBehaviors
         public void ConstantLocomotion(Vector2 normalizedDirection);
         public void MoveToLocation(Vector3 destination);
     }
+
+    public class FakePlayerService : IPlayerVerbProvider
+    {
+
+        public void ConstantLocomotion(Vector2 normalizedDirection) {}
+        public void MoveToLocation(Vector3 destination) {}
+    }
     public class PlayerIntentions : MonoBehaviour
     {
         public IPlayerVerbProvider PlayerService { get; set; }
+
         private PlayerControls _controls;
-        private TouchInteraction _end;
-        private TouchInteraction _start;
-        private Swipe _swipe;
+        [SerializeField] private TouchInteraction end;
+        [SerializeField] private TouchInteraction start;
+        [SerializeField] private Swipe swipe;
 
         private void Awake() => _controls = new PlayerControls();
         private void Start()
         {
             PlayerService ??= GetComponent<IPlayerVerbProvider>();
-            if (PlayerService == null) throw new ArgumentNullException(nameof(PlayerService));
+            PlayerService ??= new FakePlayerService();
             _controls.Gameplay.Press.started += OnTouchInteractionStarted;
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
@@ -32,22 +40,21 @@ namespace MonoBehaviors
 
         private void OnTouchInteractionStarted(InputAction.CallbackContext context)
         {
-            _start = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());
-            Debug.Log(_start);
+            start = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());
         }
 
         private void OnTouchInteractionStopped(InputAction.CallbackContext context)
         {
-            _end = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());
-            _swipe = Swipe.Of(_start, _end);
+            end = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());
+            swipe = Swipe.Of(start, end);
             EmitIntention();
         }
 
         private void EmitIntention()
         {
-            if (_swipe.Distance > 1) PlayerService.ConstantLocomotion(_swipe.VectorNormalized);
+            if (swipe.distance > 1) PlayerService.ConstantLocomotion(swipe.vectorNormalized);
             // else raycast into environment and see what is under the tap
-            else PlayerService.MoveToLocation(_end.Position);
+            else PlayerService.MoveToLocation(end.position);
         }
     }
 }

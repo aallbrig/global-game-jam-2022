@@ -15,25 +15,25 @@ namespace Core.Touch
             CalculateSwipeFacts();
         }
 
-        public float Timing { get; private set; }
+        public float timing;
 
-        public float Distance { get; private set; }
+        public float distance;
 
-        public Vector2 Vector { get; private set; }
+        public Vector2 vector;
 
-        public Vector2 VectorNormalized { get; private set; }
+        public Vector2 vectorNormalized;
 
         public static Swipe Of(TouchInteraction start, TouchInteraction end) => new Swipe(start, end);
 
         private void CalculateSwipeFacts()
         {
-            Vector = _end.Position - _start.Position;
-            VectorNormalized = Vector.normalized;
-            Timing = _end.Timing - _start.Timing;
-            Distance = Vector2.Distance(_end.Position, _start.Position);
+            vector = _end.position - _start.position;
+            vectorNormalized = vector.normalized;
+            timing = _end.timing - _start.timing;
+            distance = Vector2.Distance(_end.position, _start.position);
         }
 
         public override string ToString() =>
-            $"Timing: {Timing} Distance: {Distance} Vector: {Vector} Vector Normalized {VectorNormalized}";
+            $"Timing: {timing} Distance: {distance} Vector: {vector} Vector Normalized {vectorNormalized}";
     }
 }

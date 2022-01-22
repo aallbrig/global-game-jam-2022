@@ -9,15 +9,15 @@ namespace Core.Touch
 
         private TouchInteraction(Vector2 raw)
         {
-            Position = raw;
-            Timing = Time.time;
+            position = raw;
+            timing = Time.time;
         }
 
-        public Vector2 Position { get; }
+        public Vector2 position;
 
-        public float Timing { get; }
+        public float timing;
 
         public static TouchInteraction Of(Vector2 raw) => new TouchInteraction(raw);
-        public override string ToString() => $"Timing: {Timing} Position: {Position}";
+        public override string ToString() => $"Timing: {timing} Position: {position}";
     }
 }
