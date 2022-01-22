@@ -10,6 +10,7 @@ namespace MonoBehaviors
     {
         public void ConstantLocomotion(Vector2 normalizedDirection);
         public void MoveToLocation(Vector3 destination);
+        public void Interact(IInteractable interactable);
     }
 
     public class FakePlayerService : IPlayerVerbProvider
@@ -17,10 +18,19 @@ namespace MonoBehaviors
 
         public void ConstantLocomotion(Vector2 normalizedDirection) {}
         public void MoveToLocation(Vector3 destination) {}
+        public void Interact(IInteractable interactable) {}
     }
+
+    public interface IInteractable
+    {
+        
+    }
+
     public class PlayerIntentions : MonoBehaviour
     {
         public IPlayerVerbProvider PlayerService { get; set; }
+
+        public Camera Camera { get; set; }
 
         private PlayerControls _controls;
         [SerializeField] private TouchInteraction end;
@@ -28,14 +38,21 @@ namespace MonoBehaviors
         [SerializeField] private Swipe swipe;
 
         private void Awake() => _controls = new PlayerControls();
-        private void OnEnable()
+
+        private void Start()
         {
-            _controls.Enable();
             PlayerService ??= GetComponent<IPlayerVerbProvider>();
             PlayerService ??= new FakePlayerService();
+            Camera ??= Camera.main;
             _controls.Gameplay.Press.started += OnTouchInteractionStarted;
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
+
+        private void OnEnable()
+        {
+            _controls.Enable();
+        }
+
         private void OnDisable()
         {
             _controls.Gameplay.Press.started -= OnTouchInteractionStarted;

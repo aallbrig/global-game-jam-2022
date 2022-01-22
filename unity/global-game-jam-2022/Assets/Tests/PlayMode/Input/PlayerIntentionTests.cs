@@ -12,9 +12,11 @@ namespace Tests.PlayMode.Input
     {
         public Action<Vector2> OnConstantLocomotion;
         public Action<Vector3> OnMoveToLocation;
+        public Action<IInteractable> OnInteract;
 
         public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
         public void MoveToLocation(Vector3 destination) => OnMoveToLocation?.Invoke(destination);
+        public void Interact(IInteractable interactable) => OnInteract?.Invoke(interactable);
     }
 
     public class PlayerIntentionTests : InputTestFixture

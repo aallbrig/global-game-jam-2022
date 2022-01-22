@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Tests.PlayMode.Utilities
 {
-    public class TestLocation
+    public static class TestLocation
     {
         private static int _index;
-        private static readonly float offset = 100; // in unity units
+        private static readonly float offset = 10; // in unity units
         public static Transform Next()
         {
             var gameObject = new GameObject();
