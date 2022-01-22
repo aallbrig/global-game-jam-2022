@@ -28,15 +28,20 @@ namespace MonoBehaviors
         [SerializeField] private Swipe swipe;
 
         private void Awake() => _controls = new PlayerControls();
-        private void Start()
+        private void OnEnable()
         {
+            _controls.Enable();
             PlayerService ??= GetComponent<IPlayerVerbProvider>();
             PlayerService ??= new FakePlayerService();
             _controls.Gameplay.Press.started += OnTouchInteractionStarted;
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
-        private void OnEnable() => _controls.Enable();
-        private void OnDisable() => _controls.Enable();
+        private void OnDisable()
+        {
+            _controls.Gameplay.Press.started -= OnTouchInteractionStarted;
+            _controls.Gameplay.Press.canceled -= OnTouchInteractionStopped;
+            _controls.Disable();
+        }
 
         private void OnTouchInteractionStarted(InputAction.CallbackContext context)
         {
