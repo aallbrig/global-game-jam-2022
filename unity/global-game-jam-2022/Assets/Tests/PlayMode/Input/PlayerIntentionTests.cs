@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Core.Touch;
 using MonoBehaviors;
 using MonoBehaviors.Player;
 using NUnit.Framework;
@@ -31,31 +32,26 @@ namespace Tests.PlayMode.Input
         }
     }
 
-    public class PlayerIntentionTests : InputTestFixture
+    public class PlayerIntentionTests
     {
         [UnityTest]
-        public IEnumerator InputManager_CanCalculateNormalizedVector_OnSwipeInput()
+        public IEnumerator PlayerIntentions_InterpretsSwipe()
         {
             var called = false;
-            InputSystem.AddDevice<Touchscreen>();
-            var pointer = InputSystem.AddDevice<Pointer>();
             var sut = new GameObject().AddComponent<PlayerIntentions>();
             var spy = new SpyPlayerServices {OnConstantLocomotion = _ => called = true};
             sut.PlayerService = spy;
             yield return null;
-
-            BeginTouch(pointer.deviceId, Vector2.up * 2);
-            EndTouch(pointer.deviceId, Vector2.down);
+            
+            InputManager.TriggerSwipe(Swipe.Of(TouchInteraction.Of(Vector2.up), TouchInteraction.Of(Vector2.down)));
 
             Assert.IsTrue(called);
         }
 
         [UnityTest]
-        public IEnumerator PlayerIntention_KnowsToInteract_WithInteractableObjects()
+        public IEnumerator PlayerIntentions_InterpretsTap()
         {
             var called = false;
-            InputSystem.AddDevice<Touchscreen>();
-            var pointer = InputSystem.AddDevice<Pointer>();
             var sut = new GameObject().AddComponent<PlayerIntentions>();
             var interactableObject = new GameObject().AddComponent<SpyPlayerInteractableObject>();
             var spy = new SpyPlayerServices
@@ -68,9 +64,9 @@ namespace Tests.PlayMode.Input
             sut.Camera = camera;
             yield return null;
 
-            var worldToScreenPoint = camera.WorldToScreenPoint(interactableObject.transform.position);
-            BeginTouch(pointer.deviceId, worldToScreenPoint);
-            EndTouch(pointer.deviceId, worldToScreenPoint);
+            var screenPoint = sut.Camera.WorldToScreenPoint(interactableObject.transform.position);
+            var touchInteraction = TouchInteraction.Of(screenPoint);
+            InputManager.TriggerTap(touchInteraction);
 
             Assert.IsTrue(called);
         }

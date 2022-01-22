@@ -1,12 +1,11 @@
 using Core.Touch;
 using Generated;
-using MonoBehaviors.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace MonoBehaviors
+namespace MonoBehaviors.Player
 {
-    public class PlayerIntentions : MonoBehaviour
+    public class TestBedViewer : MonoBehaviour
     {
         [SerializeField] private TouchInteraction end;
         [SerializeField] private TouchInteraction start;
