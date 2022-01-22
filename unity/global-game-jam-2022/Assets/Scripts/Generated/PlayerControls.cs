@@ -5,13 +5,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using Object = UnityEngine.Object;
 
 namespace Generated
 {
-    public class @PlayerControls : IInputActionCollection, IDisposable
+    public class PlayerControls : IInputActionCollection, IDisposable
     {
-        public InputActionAsset asset { get; }
-        public @PlayerControls()
+
+        // Gameplay
+        private readonly InputActionMap m_Gameplay;
+        private readonly InputAction m_Gameplay_Position;
+        private readonly InputAction m_Gameplay_Press;
+        private IGameplayActions m_GameplayActionsCallbackInterface;
+        public PlayerControls()
         {
             asset = InputActionAsset.FromJson(@"{
     ""name"": ""PlayerControls"",
@@ -66,15 +72,16 @@ namespace Generated
     ""controlSchemes"": []
 }");
             // Gameplay
-            m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-            m_Gameplay_Position = m_Gameplay.FindAction("Position", throwIfNotFound: true);
-            m_Gameplay_Press = m_Gameplay.FindAction("Press", throwIfNotFound: true);
+            m_Gameplay = asset.FindActionMap("Gameplay", true);
+            m_Gameplay_Position = m_Gameplay.FindAction("Position", true);
+            m_Gameplay_Press = m_Gameplay.FindAction("Press", true);
         }
 
-        public void Dispose()
-        {
-            UnityEngine.Object.Destroy(asset);
-        }
+        public InputActionAsset asset { get; }
+
+        public GameplayActions Gameplay => new GameplayActions(this);
+
+        public void Dispose() => Object.Destroy(asset);
 
         public InputBinding? bindingMask
         {
@@ -90,71 +97,56 @@ namespace Generated
 
         public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
 
-        public bool Contains(InputAction action)
-        {
-            return asset.Contains(action);
-        }
+        public bool Contains(InputAction action) => asset.Contains(action);
 
-        public IEnumerator<InputAction> GetEnumerator()
-        {
-            return asset.GetEnumerator();
-        }
+        public IEnumerator<InputAction> GetEnumerator() => asset.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public void Enable()
-        {
-            asset.Enable();
-        }
+        public void Enable() => asset.Enable();
 
-        public void Disable()
-        {
-            asset.Disable();
-        }
+        public void Disable() => asset.Disable();
 
-        // Gameplay
-        private readonly InputActionMap m_Gameplay;
-        private IGameplayActions m_GameplayActionsCallbackInterface;
-        private readonly InputAction m_Gameplay_Position;
-        private readonly InputAction m_Gameplay_Press;
         public struct GameplayActions
         {
-            private @PlayerControls m_Wrapper;
-            public GameplayActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Position => m_Wrapper.m_Gameplay_Position;
-            public InputAction @Press => m_Wrapper.m_Gameplay_Press;
-            public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
+            private readonly PlayerControls m_Wrapper;
+            public GameplayActions(PlayerControls wrapper) => m_Wrapper = wrapper;
+
+            public InputAction Position => m_Wrapper.m_Gameplay_Position;
+
+            public InputAction Press => m_Wrapper.m_Gameplay_Press;
+
+            public InputActionMap Get() => m_Wrapper.m_Gameplay;
+            public void Enable() => Get().Enable();
+            public void Disable() => Get().Disable();
+
             public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(GameplayActions set) { return set.Get(); }
+
+            public static implicit operator InputActionMap(GameplayActions set) => set.Get();
             public void SetCallbacks(IGameplayActions instance)
             {
                 if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
                 {
-                    @Position.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
-                    @Position.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
-                    @Position.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
-                    @Press.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
-                    @Press.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
-                    @Press.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
+                    Position.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
+                    Position.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
+                    Position.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPosition;
+                    Press.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
+                    Press.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
+                    Press.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPress;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @Position.started += instance.OnPosition;
-                    @Position.performed += instance.OnPosition;
-                    @Position.canceled += instance.OnPosition;
-                    @Press.started += instance.OnPress;
-                    @Press.performed += instance.OnPress;
-                    @Press.canceled += instance.OnPress;
+                    Position.started += instance.OnPosition;
+                    Position.performed += instance.OnPosition;
+                    Position.canceled += instance.OnPosition;
+                    Press.started += instance.OnPress;
+                    Press.performed += instance.OnPress;
+                    Press.canceled += instance.OnPress;
                 }
             }
         }
-        public GameplayActions @Gameplay => new GameplayActions(this);
+
         public interface IGameplayActions
         {
             void OnPosition(InputAction.CallbackContext context);

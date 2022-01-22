@@ -7,7 +7,7 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.Input
 {
-    public class InputManagerTests: InputTestFixture
+    public class InputManagerTests : InputTestFixture
     {
         [UnityTest]
         public IEnumerator InputManager_CanCalculateNormalizedVector_OnSwipeInput()
