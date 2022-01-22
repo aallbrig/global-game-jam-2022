@@ -6,14 +6,6 @@ namespace Core.Touch
     [Serializable]
     public class Swipe
     {
-        private readonly TouchInteraction _end;
-        private readonly TouchInteraction _start;
-        private Swipe(TouchInteraction start, TouchInteraction end)
-        {
-            _start = start;
-            _end = end;
-            CalculateSwipeFacts();
-        }
 
         public float timing;
 
@@ -22,6 +14,14 @@ namespace Core.Touch
         public Vector2 vector;
 
         public Vector2 vectorNormalized;
+        private readonly TouchInteraction _end;
+        private readonly TouchInteraction _start;
+        private Swipe(TouchInteraction start, TouchInteraction end)
+        {
+            _start = start;
+            _end = end;
+            CalculateSwipeFacts();
+        }
 
         public static Swipe Of(TouchInteraction start, TouchInteraction end) => new Swipe(start, end);
 

@@ -1,4 +1,3 @@
-using System;
 using Core.Touch;
 using Generated;
 using UnityEngine;
@@ -21,21 +20,19 @@ namespace MonoBehaviors
         public void Interact(IInteractable interactable) {}
     }
 
-    public interface IInteractable
-    {
-        
-    }
+    public interface IInteractable {}
 
     public class PlayerIntentions : MonoBehaviour
     {
-        public IPlayerVerbProvider PlayerService { get; set; }
-
-        public Camera Camera { get; set; }
-
-        private PlayerControls _controls;
         [SerializeField] private TouchInteraction end;
         [SerializeField] private TouchInteraction start;
         [SerializeField] private Swipe swipe;
+
+        private PlayerControls _controls;
+
+        public IPlayerVerbProvider PlayerService { get; set; }
+
+        public Camera Camera { get; set; }
 
         private void Awake() => _controls = new PlayerControls();
 
@@ -48,10 +45,7 @@ namespace MonoBehaviors
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
 
-        private void OnEnable()
-        {
-            _controls.Enable();
-        }
+        private void OnEnable() => _controls.Enable();
 
         private void OnDisable()
         {
@@ -60,10 +54,8 @@ namespace MonoBehaviors
             _controls.Disable();
         }
 
-        private void OnTouchInteractionStarted(InputAction.CallbackContext context)
-        {
+        private void OnTouchInteractionStarted(InputAction.CallbackContext context) =>
             start = TouchInteraction.Of(_controls.Gameplay.Position.ReadValue<Vector2>());
-        }
 
         private void OnTouchInteractionStopped(InputAction.CallbackContext context)
         {

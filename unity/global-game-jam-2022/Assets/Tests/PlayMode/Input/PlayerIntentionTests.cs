@@ -11,8 +11,8 @@ namespace Tests.PlayMode.Input
     public class SpyPlayerServices : IPlayerVerbProvider
     {
         public Action<Vector2> OnConstantLocomotion;
-        public Action<Vector3> OnMoveToLocation;
         public Action<IInteractable> OnInteract;
+        public Action<Vector3> OnMoveToLocation;
 
         public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
         public void MoveToLocation(Vector3 destination) => OnMoveToLocation?.Invoke(destination);
@@ -28,8 +28,7 @@ namespace Tests.PlayMode.Input
             InputSystem.AddDevice<Touchscreen>();
             var pointer = InputSystem.AddDevice<Pointer>();
             var sut = new GameObject().AddComponent<PlayerIntentions>();
-            var spy = new SpyPlayerServices();
-            spy.OnConstantLocomotion = _ => called = true;
+            var spy = new SpyPlayerServices {OnConstantLocomotion = _ => called = true};
             sut.PlayerService = spy;
             yield return null;
 

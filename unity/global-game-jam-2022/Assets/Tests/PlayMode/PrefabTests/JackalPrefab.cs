@@ -14,7 +14,7 @@ namespace Tests.PlayMode.PrefabTests
         public IEnumerator Prefab_Spawnable()
         {
             var sut = Object.Instantiate(Resources.Load<GameObject>(PrefabLocation), TestLocation.Next());
-            
+
             yield return null;
 
             Assert.NotNull(sut);
