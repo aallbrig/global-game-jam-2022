@@ -10,7 +10,7 @@ namespace Tests.PlayMode.Input
     public class InputManagerTests: InputTestFixture
     {
         [UnityTest]
-        public IEnumerator InputManagerEmitsVector_OnSwipeInput()
+        public IEnumerator InputManager_CanCalculateNormalizedVector_OnSwipeInput()
         {
             InputSystem.AddDevice<Touchscreen>();
             var pointer = InputSystem.AddDevice<Pointer>();
