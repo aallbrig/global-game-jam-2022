@@ -13,7 +13,12 @@ namespace MonoBehaviors.UI
 
         public GameConfiguration configuration;
         public void StartGame() => SceneManager.LoadScene(configuration.levelOne.sceneName, LoadSceneMode.Single);
-        public void ViewSource() => OpenURL(configuration.sourceCodeUrl.url);
+        public void ViewSource()
+        {
+            #if !UNITY_EDITOR && UNITY_WEBGL
+                OpenURL(configuration.sourceCodeUrl.url);
+            #endif
+        }
 
         private void Start()
         {
