@@ -10,6 +10,7 @@ namespace MonoBehaviors
         public void ConstantLocomotion(Vector2 normalizedDirection);
         public void MoveToLocation(Vector3 destination);
         public void Interact(IInteractable interactable);
+        bool DetectInteractable(Ray screenPointToRay, out IInteractable interactable);
     }
 
     public class FakePlayerService : IPlayerVerbProvider
@@ -18,6 +19,21 @@ namespace MonoBehaviors
         public void ConstantLocomotion(Vector2 normalizedDirection) {}
         public void MoveToLocation(Vector3 destination) {}
         public void Interact(IInteractable interactable) {}
+        public bool DetectInteractable(Ray screenPointToRay, out IInteractable interactable)
+        {
+            interactable = null;
+            var hits = Physics.RaycastAll(screenPointToRay, 1000);
+            foreach (var hit in hits)
+            {
+                var maybeInteractable = hit.transform.GetComponent<IInteractable>();
+                if (maybeInteractable != null)
+                {
+                    interactable = maybeInteractable;
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     public interface IInteractable {}
@@ -41,6 +57,7 @@ namespace MonoBehaviors
             PlayerService ??= GetComponent<IPlayerVerbProvider>();
             PlayerService ??= new FakePlayerService();
             Camera ??= Camera.main;
+            Camera ??= new GameObject().AddComponent<Camera>();
             _controls.Gameplay.Press.started += OnTouchInteractionStarted;
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
@@ -67,8 +84,7 @@ namespace MonoBehaviors
         private void EmitIntention()
         {
             if (swipe.distance > 1) PlayerService.ConstantLocomotion(swipe.vectorNormalized);
-            // else raycast into environment and see what is under the tap
-            else PlayerService.MoveToLocation(end.position);
+            if (PlayerService.DetectInteractable(Camera.ScreenPointToRay(end.position), out var interactable)) PlayerService.Interact(interactable);
         }
     }
 }
