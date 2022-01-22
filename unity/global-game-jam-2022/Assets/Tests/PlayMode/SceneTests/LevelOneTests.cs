@@ -6,13 +6,13 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.SceneTests
 {
-    public class MainMenuTests
+    public class LevelOneTests
     {
-        private const string TargetScene = "Main Menu";
+        private const string TargetScene = "Pillar of Autumn";
 
-        public static string[] ExpectedGameElements =
+        public static string[] ExpectedGameElements = 
         {
-            "Start Button"
+            "Player"
         };
 
         private GameObject FindGameObjectByName(string name) => GameObject.Find(name);

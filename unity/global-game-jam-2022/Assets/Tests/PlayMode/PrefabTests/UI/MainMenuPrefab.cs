@@ -4,7 +4,7 @@ using Tests.PlayMode.Utilities;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests.PlayMode.PrefabTests
+namespace Tests.PlayMode.PrefabTests.UI
 {
     public class MainMenuPrefab
     {

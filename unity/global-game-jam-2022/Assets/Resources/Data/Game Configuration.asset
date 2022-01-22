@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a575c86896c9434a9aca2120ff1a29b2, type: 3}
+  m_Name: Game Configuration
+  m_EditorClassIdentifier: 
+  mainMenu:
+    sceneName: 
+  levelOne:
+    sceneName: Pillar of Autumn
+  levelTwo:
+    sceneName: Crash Landing
+  levelThree:
+    sceneName: Night Raid
+  levelFour:
+    sceneName: Alien Ship
+  credits:
+    sceneName: Credits
+  testbed:
+    sceneName: Test Bed
+  sourceCodeUrl:
+    url: https://github.com/aallbrig/global-game-jam-2022

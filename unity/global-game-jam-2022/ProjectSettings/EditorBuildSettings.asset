@@ -14,4 +14,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: b8a9427bc75154f02960e522844dcb23
+  - enabled: 1
+    path: Assets/Scenes/Pillar of Autumn.unity
+    guid: 72b334026e2644440afb7f83bee76b79
+  - enabled: 1
+    path: Assets/Scenes/Crash Landing.unity
+    guid: 964fa812ea56b49ccbf82ae4cfe7238a
+  - enabled: 1
+    path: Assets/Scenes/Night Raid.unity
+    guid: b09f6eeee7c0c4202bd0ac4eafc9d0f3
+  - enabled: 1
+    path: Assets/Scenes/Alien Ship.unity
+    guid: bc3f3f4b668784bf5ba1283976fbbde3
   m_configObjects: {}
