@@ -1,3 +1,5 @@
 mergeInto(LibraryManager.library, {
-    OpenURL: (url) => window.open(url)
+    OpenURL: function (url) {
+        window.open(url);
+    }
 });
