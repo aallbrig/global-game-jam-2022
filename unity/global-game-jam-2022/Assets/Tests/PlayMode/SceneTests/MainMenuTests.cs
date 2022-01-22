@@ -12,7 +12,8 @@ namespace Tests.PlayMode.SceneTests
 
         public static string[] ExpectedGameElements =
         {
-            "Start Button"
+            "Start Button",
+            "View Source Button"
         };
 
         private GameObject FindGameObjectByName(string name) => GameObject.Find(name);
