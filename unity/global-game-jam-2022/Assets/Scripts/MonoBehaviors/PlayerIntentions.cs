@@ -1,43 +1,11 @@
 using Core.Touch;
 using Generated;
+using MonoBehaviors.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace MonoBehaviors
 {
-    public interface IPlayerVerbProvider
-    {
-        public void ConstantLocomotion(Vector2 normalizedDirection);
-        public void MoveToLocation(Vector3 destination);
-        public void Interact(IInteractable interactable);
-        bool DetectInteractable(Ray screenPointToRay, out IInteractable interactable);
-    }
-
-    public class FakePlayerService : IPlayerVerbProvider
-    {
-
-        public void ConstantLocomotion(Vector2 normalizedDirection) {}
-        public void MoveToLocation(Vector3 destination) {}
-        public void Interact(IInteractable interactable) {}
-        public bool DetectInteractable(Ray screenPointToRay, out IInteractable interactable)
-        {
-            interactable = null;
-            var hits = Physics.RaycastAll(screenPointToRay, 1000);
-            foreach (var hit in hits)
-            {
-                var maybeInteractable = hit.transform.GetComponent<IInteractable>();
-                if (maybeInteractable != null)
-                {
-                    interactable = maybeInteractable;
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public interface IInteractable {}
-
     public class PlayerIntentions : MonoBehaviour
     {
         [SerializeField] private TouchInteraction end;

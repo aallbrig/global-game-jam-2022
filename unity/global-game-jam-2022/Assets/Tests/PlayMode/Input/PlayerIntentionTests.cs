@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using MonoBehaviors;
+using MonoBehaviors.Player;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,22 +10,22 @@ using UnityEngine.TestTools;
 namespace Tests.PlayMode.Input
 {
     [RequireComponent(typeof(BoxCollider))]
-    public class SpyInteractableObject : MonoBehaviour, IInteractable {}
+    public class SpyPlayerInteractableObject : MonoBehaviour, IPlayerInteractable {}
 
     public class SpyPlayerServices : IPlayerVerbProvider
     {
         public Action<Vector2> OnConstantLocomotion;
-        public Action<IInteractable> OnInteract;
+        public Action<IPlayerInteractable> OnInteract;
         public Action<Vector3> OnMoveToLocation;
         public Action<Ray> OnDetectInteractable;
-        public IInteractable Interactable;
+        public IPlayerInteractable PlayerInteractable;
 
         public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
         public void MoveToLocation(Vector3 destination) => OnMoveToLocation?.Invoke(destination);
-        public void Interact(IInteractable interactable) => OnInteract?.Invoke(interactable);
-        public bool DetectInteractable(Ray screenPointToRay, out IInteractable interactable)
+        public void Interact(IPlayerInteractable playerInteractable) => OnInteract?.Invoke(playerInteractable);
+        public bool DetectInteractable(Ray screenPointToRay, out IPlayerInteractable playerInteractable)
         {
-            interactable = Interactable;
+            playerInteractable = PlayerInteractable;
             OnDetectInteractable?.Invoke(screenPointToRay);
             return true;
         }
@@ -56,11 +57,11 @@ namespace Tests.PlayMode.Input
             InputSystem.AddDevice<Touchscreen>();
             var pointer = InputSystem.AddDevice<Pointer>();
             var sut = new GameObject().AddComponent<PlayerIntentions>();
-            var interactableObject = new GameObject().AddComponent<SpyInteractableObject>();
+            var interactableObject = new GameObject().AddComponent<SpyPlayerInteractableObject>();
             var spy = new SpyPlayerServices
             {
                 OnInteract = _ => called = true,
-                Interactable = interactableObject
+                PlayerInteractable = interactableObject
             };
             var camera = new GameObject().AddComponent<Camera>();
             sut.PlayerService = spy;
