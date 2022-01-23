@@ -10,8 +10,8 @@ namespace Tests.PlayMode.MonoBehaviours.UI
     public class SpyMainMenuInteractions : IMainMenuInteractions
     {
         public Action OnStartGame = () => {};
-        public Action OnViewSource = () => {};
         public Action OnTestBed = () => {};
+        public Action OnViewSource = () => {};
         public void StartGame() => OnStartGame.Invoke();
         public void ViewSource() => OnViewSource.Invoke();
         public void TestBed() => OnTestBed.Invoke();

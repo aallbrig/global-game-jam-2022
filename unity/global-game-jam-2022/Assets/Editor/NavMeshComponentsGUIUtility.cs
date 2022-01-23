@@ -51,11 +51,9 @@ namespace UnityEditor.AI
             agentTypeNames[count] = "";
             agentTypeNames[count + 1] = "Open Agent Settings...";
 
-            bool validAgentType = index != -1;
+            var validAgentType = index != -1;
             if (!validAgentType)
-            {
                 EditorGUILayout.HelpBox("Agent Type invalid.", MessageType.Warning);
-            }
 
             var rect = EditorGUILayout.GetControlRect(true, EditorGUIUtility.singleLineHeight);
             EditorGUI.BeginProperty(rect, GUIContent.none, agentTypeID);
@@ -85,7 +83,7 @@ namespace UnityEditor.AI
         public static void AgentMaskPopup(string labelName, SerializedProperty agentMask)
         {
             // Contents of the dropdown box.
-            string popupContent = "";
+            var popupContent = "";
 
             if (agentMask.hasMultipleDifferentValues)
                 popupContent = "\u2014";
@@ -97,7 +95,7 @@ namespace UnityEditor.AI
 
             EditorGUI.BeginProperty(popupRect, GUIContent.none, agentMask);
             popupRect = EditorGUI.PrefixLabel(popupRect, 0, new GUIContent(labelName));
-            bool pressed = GUI.Button(popupRect, content, EditorStyles.popup);
+            var pressed = GUI.Button(popupRect, content, EditorStyles.popup);
 
             if (pressed)
             {
@@ -117,7 +115,7 @@ namespace UnityEditor.AI
                     var sname = NavMesh.GetSettingsNameFromID(id);
 
                     var showSelected = show && AgentMaskHasSelectedAgentTypeID(agentMask, id);
-                    var userData = new object[] { agentMask, id, !showSelected };
+                    var userData = new object[] {agentMask, id, !showSelected};
                     menu.AddItem(new GUIContent(sname), showSelected, ToggleAgentMaskItem, userData);
                 }
 
@@ -142,22 +140,20 @@ namespace UnityEditor.AI
             return child;
         }
 
-        static bool IsAll(SerializedProperty agentMask)
-        {
-            return agentMask.arraySize == 1 && agentMask.GetArrayElementAtIndex(0).intValue == -1;
-        }
+        private static bool IsAll(SerializedProperty agentMask) =>
+            agentMask.arraySize == 1 && agentMask.GetArrayElementAtIndex(0).intValue == -1;
 
-        static void ToggleAgentMaskItem(object userData)
+        private static void ToggleAgentMaskItem(object userData)
         {
-            var args = (object[])userData;
-            var agentMask = (SerializedProperty)args[0];
-            var agentTypeID = (int)args[1];
-            var value = (bool)args[2];
+            var args = (object[]) userData;
+            var agentMask = (SerializedProperty) args[0];
+            var agentTypeID = (int) args[1];
+            var value = (bool) args[2];
 
             ToggleAgentMaskItem(agentMask, agentTypeID, value);
         }
 
-        static void ToggleAgentMaskItem(SerializedProperty agentMask, int agentTypeID, bool value)
+        private static void ToggleAgentMaskItem(SerializedProperty agentMask, int agentTypeID, bool value)
         {
             if (agentMask.hasMultipleDifferentValues)
             {
@@ -166,7 +162,7 @@ namespace UnityEditor.AI
             }
 
             // Find which index this agent type is in the agentMask array.
-            int idx = -1;
+            var idx = -1;
             for (var j = 0; j < agentMask.arraySize; j++)
             {
                 var elem = agentMask.GetArrayElementAtIndex(j);
@@ -176,9 +172,7 @@ namespace UnityEditor.AI
 
             // Handle "All" special case.
             if (IsAll(agentMask))
-            {
                 agentMask.DeleteArrayElementAtIndex(0);
-            }
 
             // Toggle value.
             if (value)
@@ -192,31 +186,29 @@ namespace UnityEditor.AI
             else
             {
                 if (idx != -1)
-                {
                     agentMask.DeleteArrayElementAtIndex(idx);
-                }
             }
 
             agentMask.serializedObject.ApplyModifiedProperties();
         }
 
-        static void SetAgentMaskNone(object data)
+        private static void SetAgentMaskNone(object data)
         {
-            var agentMask = (SerializedProperty)data;
+            var agentMask = (SerializedProperty) data;
             agentMask.ClearArray();
             agentMask.serializedObject.ApplyModifiedProperties();
         }
 
-        static void SetAgentMaskAll(object data)
+        private static void SetAgentMaskAll(object data)
         {
-            var agentMask = (SerializedProperty)data;
+            var agentMask = (SerializedProperty) data;
             agentMask.ClearArray();
             agentMask.InsertArrayElementAtIndex(0);
             agentMask.GetArrayElementAtIndex(0).intValue = -1;
             agentMask.serializedObject.ApplyModifiedProperties();
         }
 
-        static string GetAgentMaskLabelName(SerializedProperty agentMask)
+        private static string GetAgentMaskLabelName(SerializedProperty agentMask)
         {
             if (agentMask.arraySize == 0)
                 return "None";
@@ -244,7 +236,7 @@ namespace UnityEditor.AI
             return "Mixed...";
         }
 
-        static bool AgentMaskHasSelectedAgentTypeID(SerializedProperty agentMask, int agentTypeID)
+        private static bool AgentMaskHasSelectedAgentTypeID(SerializedProperty agentMask, int agentTypeID)
         {
             for (var j = 0; j < agentMask.arraySize; j++)
             {

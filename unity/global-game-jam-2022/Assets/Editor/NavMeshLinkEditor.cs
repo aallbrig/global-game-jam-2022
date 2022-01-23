@@ -5,24 +5,24 @@ namespace UnityEditor.AI
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(NavMeshLink))]
-    class NavMeshLinkEditor : Editor
+    internal class NavMeshLinkEditor : Editor
     {
-        SerializedProperty m_AgentTypeID;
-        SerializedProperty m_Area;
-        SerializedProperty m_CostModifier;
-        SerializedProperty m_AutoUpdatePosition;
-        SerializedProperty m_Bidirectional;
-        SerializedProperty m_EndPoint;
-        SerializedProperty m_StartPoint;
-        SerializedProperty m_Width;
 
-        static int s_SelectedID;
-        static int s_SelectedPoint = -1;
+        private static int s_SelectedID;
+        private static int s_SelectedPoint = -1;
 
-        static Color s_HandleColor = new Color(255f, 167f, 39f, 210f) / 255;
-        static Color s_HandleColorDisabled = new Color(255f * 0.75f, 167f * 0.75f, 39f * 0.75f, 100f) / 255;
+        private static readonly Color s_HandleColor = new Color(255f, 167f, 39f, 210f) / 255;
+        private static readonly Color s_HandleColorDisabled = new Color(255f * 0.75f, 167f * 0.75f, 39f * 0.75f, 100f) / 255;
+        private SerializedProperty m_AgentTypeID;
+        private SerializedProperty m_Area;
+        private SerializedProperty m_AutoUpdatePosition;
+        private SerializedProperty m_Bidirectional;
+        private SerializedProperty m_CostModifier;
+        private SerializedProperty m_EndPoint;
+        private SerializedProperty m_StartPoint;
+        private SerializedProperty m_Width;
 
-        void OnEnable()
+        private void OnEnable()
         {
             m_AgentTypeID = serializedObject.FindProperty("m_AgentTypeID");
             m_Area = serializedObject.FindProperty("m_Area");
@@ -39,17 +39,94 @@ namespace UnityEditor.AI
             NavMeshVisualizationSettings.showNavigation++;
         }
 
-        void OnDisable()
+        private void OnDisable() => NavMeshVisualizationSettings.showNavigation--;
+
+        public void OnSceneGUI()
         {
-            NavMeshVisualizationSettings.showNavigation--;
+            var navLink = (NavMeshLink) target;
+            if (!navLink.enabled)
+                return;
+
+            var mat = UnscaledLocalToWorldMatrix(navLink.transform);
+
+            var startPt = mat.MultiplyPoint(navLink.startPoint);
+            var endPt = mat.MultiplyPoint(navLink.endPoint);
+            var midPt = Vector3.Lerp(startPt, endPt, 0.35f);
+            var startSize = HandleUtility.GetHandleSize(startPt);
+            var endSize = HandleUtility.GetHandleSize(endPt);
+            var midSize = HandleUtility.GetHandleSize(midPt);
+
+            var zup = Quaternion.FromToRotation(Vector3.forward, Vector3.up);
+            var right = mat.MultiplyVector(CalcLinkRight(navLink));
+
+            var oldColor = Handles.color;
+            Handles.color = s_HandleColor;
+
+            Vector3 pos;
+
+            if (navLink.GetInstanceID() == s_SelectedID && s_SelectedPoint == 0)
+            {
+                EditorGUI.BeginChangeCheck();
+                Handles.CubeHandleCap(0, startPt, zup, 0.1f * startSize, Event.current.type);
+                pos = Handles.PositionHandle(startPt, navLink.transform.rotation);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(navLink, "Move link point");
+                    navLink.startPoint = mat.inverse.MultiplyPoint(pos);
+                }
+            }
+            else
+            {
+                if (Handles.Button(startPt, zup, 0.1f * startSize, 0.1f * startSize, Handles.CubeHandleCap))
+                {
+                    s_SelectedPoint = 0;
+                    s_SelectedID = navLink.GetInstanceID();
+                }
+            }
+
+            if (navLink.GetInstanceID() == s_SelectedID && s_SelectedPoint == 1)
+            {
+                EditorGUI.BeginChangeCheck();
+                Handles.CubeHandleCap(0, endPt, zup, 0.1f * startSize, Event.current.type);
+                pos = Handles.PositionHandle(endPt, navLink.transform.rotation);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(navLink, "Move link point");
+                    navLink.endPoint = mat.inverse.MultiplyPoint(pos);
+                }
+            }
+            else
+            {
+                if (Handles.Button(endPt, zup, 0.1f * endSize, 0.1f * endSize, Handles.CubeHandleCap))
+                {
+                    s_SelectedPoint = 1;
+                    s_SelectedID = navLink.GetInstanceID();
+                }
+            }
+
+            EditorGUI.BeginChangeCheck();
+            pos = Handles.Slider(midPt + right * navLink.width * 0.5f, right, midSize * 0.03f, Handles.DotHandleCap, 0);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(navLink, "Adjust link width");
+                navLink.width = Mathf.Max(0.0f, 2.0f * Vector3.Dot(right, pos - midPt));
+            }
+
+            EditorGUI.BeginChangeCheck();
+            pos = Handles.Slider(midPt - right * navLink.width * 0.5f, -right, midSize * 0.03f, Handles.DotHandleCap, 0);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(navLink, "Adjust link width");
+                navLink.width = Mathf.Max(0.0f, 2.0f * Vector3.Dot(-right, pos - midPt));
+            }
+
+            Handles.color = oldColor;
         }
 
-        static Matrix4x4 UnscaledLocalToWorldMatrix(Transform t)
-        {
-            return Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
-        }
+        private static Matrix4x4 UnscaledLocalToWorldMatrix(Transform t) =>
+            Matrix4x4.TRS(t.position, t.rotation, Vector3.one);
 
-        void AlignTransformToEndPoints(NavMeshLink navLink)
+        private void AlignTransformToEndPoints(NavMeshLink navLink)
         {
             var mat = UnscaledLocalToWorldMatrix(navLink.transform);
 
@@ -118,13 +195,13 @@ namespace UnityEditor.AI
             EditorGUILayout.Space();
         }
 
-        static Vector3 CalcLinkRight(NavMeshLink navLink)
+        private static Vector3 CalcLinkRight(NavMeshLink navLink)
         {
             var dir = navLink.endPoint - navLink.startPoint;
-            return (new Vector3(-dir.z, 0.0f, dir.x)).normalized;
+            return new Vector3(-dir.z, 0.0f, dir.x).normalized;
         }
 
-        static void DrawLink(NavMeshLink navLink)
+        private static void DrawLink(NavMeshLink navLink)
         {
             var right = CalcLinkRight(navLink);
             var rad = navLink.width * 0.5f;
@@ -136,7 +213,7 @@ namespace UnityEditor.AI
         }
 
         [DrawGizmo(GizmoType.Selected | GizmoType.Active | GizmoType.Pickable)]
-        static void RenderBoxGizmo(NavMeshLink navLink, GizmoType gizmoType)
+        private static void RenderBoxGizmo(NavMeshLink navLink, GizmoType gizmoType)
         {
             if (!EditorApplication.isPlaying)
                 navLink.UpdateLink();
@@ -160,7 +237,7 @@ namespace UnityEditor.AI
         }
 
         [DrawGizmo(GizmoType.NotInSelectionHierarchy | GizmoType.Pickable)]
-        static void RenderBoxGizmoNotSelected(NavMeshLink navLink, GizmoType gizmoType)
+        private static void RenderBoxGizmoNotSelected(NavMeshLink navLink, GizmoType gizmoType)
         {
             if (NavMeshVisualizationSettings.showNavigation > 0)
             {
@@ -183,93 +260,11 @@ namespace UnityEditor.AI
             Gizmos.DrawIcon(navLink.transform.position, "NavMeshLink Icon", true);
         }
 
-        public void OnSceneGUI()
-        {
-            var navLink = (NavMeshLink)target;
-            if (!navLink.enabled)
-                return;
-
-            var mat = UnscaledLocalToWorldMatrix(navLink.transform);
-
-            var startPt = mat.MultiplyPoint(navLink.startPoint);
-            var endPt = mat.MultiplyPoint(navLink.endPoint);
-            var midPt = Vector3.Lerp(startPt, endPt, 0.35f);
-            var startSize = HandleUtility.GetHandleSize(startPt);
-            var endSize = HandleUtility.GetHandleSize(endPt);
-            var midSize = HandleUtility.GetHandleSize(midPt);
-
-            var zup = Quaternion.FromToRotation(Vector3.forward, Vector3.up);
-            var right = mat.MultiplyVector(CalcLinkRight(navLink));
-
-            var oldColor = Handles.color;
-            Handles.color = s_HandleColor;
-
-            Vector3 pos;
-
-            if (navLink.GetInstanceID() == s_SelectedID && s_SelectedPoint == 0)
-            {
-                EditorGUI.BeginChangeCheck();
-                Handles.CubeHandleCap(0, startPt, zup, 0.1f * startSize, Event.current.type);
-                pos = Handles.PositionHandle(startPt, navLink.transform.rotation);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(navLink, "Move link point");
-                    navLink.startPoint = mat.inverse.MultiplyPoint(pos);
-                }
-            }
-            else
-            {
-                if (Handles.Button(startPt, zup, 0.1f * startSize, 0.1f * startSize, Handles.CubeHandleCap))
-                {
-                    s_SelectedPoint = 0;
-                    s_SelectedID = navLink.GetInstanceID();
-                }
-            }
-
-            if (navLink.GetInstanceID() == s_SelectedID && s_SelectedPoint == 1)
-            {
-                EditorGUI.BeginChangeCheck();
-                Handles.CubeHandleCap(0, endPt, zup, 0.1f * startSize, Event.current.type);
-                pos = Handles.PositionHandle(endPt, navLink.transform.rotation);
-                if (EditorGUI.EndChangeCheck())
-                {
-                    Undo.RecordObject(navLink, "Move link point");
-                    navLink.endPoint = mat.inverse.MultiplyPoint(pos);
-                }
-            }
-            else
-            {
-                if (Handles.Button(endPt, zup, 0.1f * endSize, 0.1f * endSize, Handles.CubeHandleCap))
-                {
-                    s_SelectedPoint = 1;
-                    s_SelectedID = navLink.GetInstanceID();
-                }
-            }
-
-            EditorGUI.BeginChangeCheck();
-            pos = Handles.Slider(midPt + right * navLink.width * 0.5f, right, midSize * 0.03f, Handles.DotHandleCap, 0);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(navLink, "Adjust link width");
-                navLink.width = Mathf.Max(0.0f, 2.0f * Vector3.Dot(right, (pos - midPt)));
-            }
-
-            EditorGUI.BeginChangeCheck();
-            pos = Handles.Slider(midPt - right * navLink.width * 0.5f, -right, midSize * 0.03f, Handles.DotHandleCap, 0);
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(navLink, "Adjust link width");
-                navLink.width = Mathf.Max(0.0f, 2.0f * Vector3.Dot(-right, (pos - midPt)));
-            }
-
-            Handles.color = oldColor;
-        }
-
         [MenuItem("GameObject/AI/NavMesh Link", false, 2002)]
-        static public void CreateNavMeshLink(MenuCommand menuCommand)
+        public static void CreateNavMeshLink(MenuCommand menuCommand)
         {
             var parent = menuCommand.context as GameObject;
-            GameObject go = NavMeshComponentsGUIUtility.CreateAndSelectGameObject("NavMesh Link", parent);
+            var go = NavMeshComponentsGUIUtility.CreateAndSelectGameObject("NavMesh Link", parent);
             go.AddComponent<NavMeshLink>();
             var view = SceneView.lastActiveSceneView;
             if (view != null)

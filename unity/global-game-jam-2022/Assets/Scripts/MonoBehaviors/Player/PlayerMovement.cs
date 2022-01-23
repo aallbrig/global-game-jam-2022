@@ -21,10 +21,8 @@ namespace MonoBehaviors.Player
             agent.destination = transform.position + direction * 2;
         }
 
-        public void ConstantLocomotion(Vector2 normalizedDirection)
-        {
+        public void ConstantLocomotion(Vector2 normalizedDirection) =>
             direction = new Vector3(normalizedDirection.x, 0, normalizedDirection.y);
-        }
         public void Interact(IPlayerInteractable playerInteractable) {}
         public bool DetectInteractable(Ray screenPointToRay, out IPlayerInteractable playerInteractable)
         {

@@ -2,7 +2,6 @@ using System.Collections;
 using NUnit.Framework;
 using Tests.PlayMode.Utilities;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
@@ -31,7 +30,7 @@ namespace Tests.PlayMode.PrefabTests
 
             yield return new WaitForSeconds(0.25f);
             var positionB = sut.transform.position;
-            
+
             Assert.IsTrue(Vector3.Distance(positionA, positionB) > 0);
         }
     }
