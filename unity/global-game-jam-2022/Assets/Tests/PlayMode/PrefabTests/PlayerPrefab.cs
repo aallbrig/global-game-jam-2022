@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using Tests.PlayMode.Utilities;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
@@ -16,8 +17,9 @@ namespace Tests.PlayMode.PrefabTests
         public IEnumerator PlayerPrefab_RespondsToDownwardSwipe()
         {
             var testLocation = TestLocation.Next();
+            var floor = Object.Instantiate(Resources.Load<GameObject>(TestPlatform), testLocation);
+            floor.GetComponent<NavMeshSurface>().BuildNavMesh();
             var sut = Object.Instantiate(Resources.Load<GameObject>(PrefabLocation), testLocation);
-            Object.Instantiate(Resources.Load<GameObject>(TestPlatform), testLocation);
 
             InputSystem.AddDevice<Touchscreen>();
             var pointer = InputSystem.AddDevice<Pointer>();

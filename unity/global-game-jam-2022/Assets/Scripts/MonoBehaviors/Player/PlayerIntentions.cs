@@ -1,3 +1,4 @@
+using System;
 using Core.Touch;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace MonoBehaviors.Player
     public class PlayerIntentions : MonoBehaviour
     {
         public IPlayerVerbProvider PlayerService { get; set; }
+        public ILocomotion PlayerLocomotion { get; set; }
 
         public Camera Camera { get; set; }
 
@@ -13,7 +15,9 @@ namespace MonoBehaviors.Player
         {
             PlayerService ??= GetComponent<IPlayerVerbProvider>();
             PlayerService ??= new FakePlayerService();
-            Camera ??= Camera.main;
+            PlayerLocomotion ??= GetComponent<ILocomotion>();
+            PlayerLocomotion ??= new FakeLocomotion();
+            Camera ??= Camera.current;
             Camera ??= new GameObject().AddComponent<Camera>();
         }
 
@@ -35,6 +39,11 @@ namespace MonoBehaviors.Player
                 PlayerService.Interact(interactable);
         }
 
-        private void HandleSwipe(Swipe swipe) => PlayerService.ConstantLocomotion(swipe.vectorNormalized);
+        private void HandleSwipe(Swipe swipe) => PlayerLocomotion.ConstantLocomotion(swipe.vectorNormalized);
+    }
+
+    internal class FakeLocomotion : ILocomotion
+    {
+        public void ConstantLocomotion(Vector2 normalizedDirection) {}
     }
 }

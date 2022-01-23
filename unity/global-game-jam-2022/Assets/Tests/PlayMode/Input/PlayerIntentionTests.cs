@@ -12,15 +12,18 @@ namespace Tests.PlayMode.Input
     [RequireComponent(typeof(BoxCollider))]
     public class SpyPlayerInteractableObject : MonoBehaviour, IPlayerInteractable {}
 
-    public class SpyPlayerServices : IPlayerVerbProvider
+    public class SpyLocomotion: ILocomotion
     {
         public Action<Vector2> OnConstantLocomotion;
+        public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
+    }
+    public class SpyPlayerServices : IPlayerVerbProvider
+    {
         public Action<Ray> OnDetectInteractable;
         public Action<IPlayerInteractable> OnInteract;
         public Action<Vector3> OnMoveToLocation;
         public IPlayerInteractable PlayerInteractable;
 
-        public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
         public void Interact(IPlayerInteractable playerInteractable) => OnInteract?.Invoke(playerInteractable);
         public bool DetectInteractable(Ray screenPointToRay, out IPlayerInteractable playerInteractable)
         {
@@ -38,8 +41,8 @@ namespace Tests.PlayMode.Input
         {
             var called = false;
             var sut = new GameObject().AddComponent<PlayerIntentions>();
-            var spy = new SpyPlayerServices {OnConstantLocomotion = _ => called = true};
-            sut.PlayerService = spy;
+            var spy = new SpyLocomotion {OnConstantLocomotion = _ => called = true};
+            sut.PlayerLocomotion = spy;
             yield return null;
 
             InputManager.TriggerSwipe(Swipe.Of(TouchInteraction.Of(Vector2.up), TouchInteraction.Of(Vector2.down)));
