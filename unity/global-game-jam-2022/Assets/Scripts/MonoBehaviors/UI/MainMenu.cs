@@ -6,6 +6,7 @@ namespace MonoBehaviors.UI
     {
         public void StartGame();
         public void ViewSource();
+        public void TestBed();
     }
 
     public class MainMenu : MonoBehaviour
@@ -19,11 +20,13 @@ namespace MonoBehaviors.UI
 
         public void StartGame() => Interactions.StartGame();
         public void ViewSource() => Interactions.ViewSource();
+        public void TestBed() => Interactions.TestBed();
     }
 
     public class FakeMainMenuInteractions : IMainMenuInteractions
     {
         public void StartGame() {}
         public void ViewSource() {}
+        public void TestBed() {}
     }
 }

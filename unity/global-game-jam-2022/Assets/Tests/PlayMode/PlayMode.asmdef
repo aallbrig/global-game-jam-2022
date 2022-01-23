@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Scripts",
         "Unity.InputSystem",
-        "Unity.InputSystem.TestFramework"
+        "Unity.InputSystem.TestFramework",
+        "NavMeshComponents"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

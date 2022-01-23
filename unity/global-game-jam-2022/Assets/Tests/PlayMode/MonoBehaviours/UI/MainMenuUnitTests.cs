@@ -11,8 +11,10 @@ namespace Tests.PlayMode.MonoBehaviours.UI
     {
         public Action OnStartGame = () => {};
         public Action OnViewSource = () => {};
+        public Action OnTestBed = () => {};
         public void StartGame() => OnStartGame.Invoke();
         public void ViewSource() => OnViewSource.Invoke();
+        public void TestBed() => OnTestBed.Invoke();
     }
 
     public class MainMenuUnitTests

@@ -22,6 +22,7 @@ namespace MonoBehaviors.UI
                 OpenURL(configuration.sourceCodeUrl.url);
             #endif
         }
+        public void TestBed() => SceneManager.LoadScene(configuration.testbed.sceneName, LoadSceneMode.Single);
         [DllImport("__Internal")] private static extern void OpenURL(string url);
     }
 }
