@@ -23,7 +23,8 @@ namespace MonoBehaviors.Player
         {
             if (direction == Vector3.zero) return;
 
-            agent.destination = transform.position + direction * 2;
+            // agent.destination = transform.position + direction * 2;
+            agent.velocity = direction * agent.speed;
         }
 
         public void ConstantLocomotion(Vector2 normalizedDirection)
@@ -33,6 +34,7 @@ namespace MonoBehaviors.Player
             var directionFromCameraPerspective = DirectionFromCameraPerspective(Camera.transform, normalizedDirection);
             direction = directionFromCameraPerspective;
         }
+
         public static Vector3 DirectionFromCameraPerspective(Transform cameraTransform, Vector2 swipeInput)
         {
             var perspectiveForward = cameraTransform.forward.normalized;

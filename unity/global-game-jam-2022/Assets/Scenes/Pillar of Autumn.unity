@@ -5235,6 +5235,10 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 808531664}
+    - target: {fileID: 4557075859858802356, guid: 9418d919407fb4a7b82f5632e40c2702, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 240
+      objectReference: {fileID: 0}
     - target: {fileID: 4657522440133224579, guid: 9418d919407fb4a7b82f5632e40c2702, type: 3}
       propertyPath: m_Name
       value: Player
