@@ -4,7 +4,7 @@ namespace Core.AI.BehaviorTrees.BuildingBlocks
 {
     public abstract class Composite : Behavior, IAddChild
     {
-        protected readonly List<Behavior> Children;
+        public readonly List<Behavior> Children;
         protected int CurrentIndex;
 
         protected Composite(List<Behavior> children) => Children = children ?? new List<Behavior>();
