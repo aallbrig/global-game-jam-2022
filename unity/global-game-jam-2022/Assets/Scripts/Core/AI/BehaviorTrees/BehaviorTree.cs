@@ -13,12 +13,15 @@ namespace Core.AI.BehaviorTrees
             RootBehavior = rootNode ?? throw new ArgumentNullException(nameof(rootNode));
 
         public Behavior RootBehavior { get; }
+        // public Behavior CurrentBehavior { get; private set; }
 
-        public void Tick() =>
+        public void Tick()
+        {
             // DESIGN DECISION: when a BT re-evaluates, should it pick up from where it left off?
             // (aka remember the current node?)
             // ...because right now, it just sorta executes the whole thing
             RootBehavior.Evaluate();
+        }
 
         public string PrintTree()
         {
