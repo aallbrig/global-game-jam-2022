@@ -9,6 +9,7 @@ namespace MonoBehaviors.Player
         public IPlayerVerbProvider PlayerService { get; set; }
         public ILocomotion PlayerLocomotion { get; set; }
 
+        public Camera camera;
         public Camera Camera { get; set; }
 
         private void Start()
@@ -17,6 +18,7 @@ namespace MonoBehaviors.Player
             PlayerService ??= new FakePlayerService();
             PlayerLocomotion ??= GetComponent<ILocomotion>();
             PlayerLocomotion ??= new FakeLocomotion();
+            Camera ??= camera;
             Camera ??= Camera.current;
             Camera ??= new GameObject().AddComponent<Camera>();
         }

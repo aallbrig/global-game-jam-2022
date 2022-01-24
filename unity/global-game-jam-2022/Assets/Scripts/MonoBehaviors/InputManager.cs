@@ -15,18 +15,11 @@ namespace MonoBehaviors
 
         private PlayerControls _controls;
 
-        public IPlayerVerbProvider PlayerService { get; set; }
-
-        public Camera Camera { get; set; }
 
         private void Awake() => _controls = new PlayerControls();
 
         private void Start()
         {
-            PlayerService ??= GetComponent<IPlayerVerbProvider>();
-            PlayerService ??= new FakePlayerService();
-            Camera ??= Camera.main;
-            Camera ??= new GameObject().AddComponent<Camera>();
             _controls.Gameplay.Press.started += OnTouchInteractionStarted;
             _controls.Gameplay.Press.canceled += OnTouchInteractionStopped;
         }
