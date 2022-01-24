@@ -12,10 +12,10 @@ namespace UnityEditor.AI
 
         private static readonly Color s_HandleColor = new Color(187f, 138f, 240f, 210f) / 255;
         private static readonly Color s_HandleColorDisabled = new Color(187f * 0.75f, 138f * 0.75f, 240f * 0.75f, 100f) / 255;
-        private SerializedProperty m_AffectedAgents;
-        private SerializedProperty m_Area;
 
         private readonly BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle();
+        private SerializedProperty m_AffectedAgents;
+        private SerializedProperty m_Area;
         private SerializedProperty m_Center;
         private SerializedProperty m_Size;
 

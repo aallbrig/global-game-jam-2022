@@ -20,17 +20,11 @@ namespace Core.AI.BehaviorTrees
             // ...because right now, it just sorta executes the whole thing
             RootBehavior.Evaluate();
 
-        struct BehaviorLevel
-        {
-            public int Level;
-            public Behavior Behavior;
-        }
-
         public string PrintTree()
         {
             var stringRepresentation = "Behavior Tree\n";
             var behaviorStack = new Stack<BehaviorLevel>();
-            behaviorStack.Push(new BehaviorLevel { Level = 0, Behavior = RootBehavior });
+            behaviorStack.Push(new BehaviorLevel {Level = 0, Behavior = RootBehavior});
             while (behaviorStack.Count != 0)
             {
                 var nextBehaviorLevel = behaviorStack.Pop();
@@ -38,14 +32,17 @@ namespace Core.AI.BehaviorTrees
                 var typeLastBit = typeFullName.Substring(typeFullName.LastIndexOf('.') + 1);
                 stringRepresentation += $"{new string('-', nextBehaviorLevel.Level)} {typeLastBit}\n";
                 if (nextBehaviorLevel.Behavior is Composite nextComposite)
-                {
                     for (var i = nextComposite.Children.Count - 1; i >= 0; i--)
-                    {
-                        behaviorStack.Push(new BehaviorLevel{ Level = nextBehaviorLevel.Level + 1, Behavior = nextComposite.Children[i]});
-                    }
-                }
+                        behaviorStack.Push(new BehaviorLevel
+                            {Level = nextBehaviorLevel.Level + 1, Behavior = nextComposite.Children[i]});
             }
             return stringRepresentation;
+        }
+
+        private struct BehaviorLevel
+        {
+            public int Level;
+            public Behavior Behavior;
         }
     }
 }

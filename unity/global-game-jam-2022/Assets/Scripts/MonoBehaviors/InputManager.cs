@@ -1,7 +1,6 @@
 using System;
 using Core.Touch;
 using Generated;
-using MonoBehaviors.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

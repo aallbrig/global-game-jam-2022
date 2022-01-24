@@ -1,4 +1,3 @@
-using System;
 using Core.Touch;
 using UnityEngine;
 
@@ -6,10 +5,13 @@ namespace MonoBehaviors.Player
 {
     public class PlayerIntentions : MonoBehaviour
     {
-        public IPlayerVerbProvider PlayerService { get; set; }
-        public ILocomotion PlayerLocomotion { get; set; }
 
         public Camera camera;
+
+        public IPlayerVerbProvider PlayerService { get; set; }
+
+        public ILocomotion PlayerLocomotion { get; set; }
+
         public Camera Camera { get; set; }
 
         private void Start()

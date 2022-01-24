@@ -4,8 +4,6 @@ namespace MonoBehaviors.Player
 {
     public class FakePlayerService : IPlayerVerbProvider
     {
-
-        public void ConstantLocomotion(Vector2 normalizedDirection) {}
         public void Interact(IPlayerInteractable playerInteractable) {}
         public bool DetectInteractable(Ray screenPointToRay, out IPlayerInteractable playerInteractable)
         {
@@ -22,5 +20,7 @@ namespace MonoBehaviors.Player
             }
             return false;
         }
+
+        public void ConstantLocomotion(Vector2 normalizedDirection) {}
     }
 }

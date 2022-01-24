@@ -7,15 +7,11 @@ namespace MonoBehaviors.Player
     [RequireComponent(typeof(NavMeshAgent))]
     public class PlayerMovement : MonoBehaviour, ILocomotion
     {
-        public static Vector3 DirectionFromCameraPerspective(Transform cameraTransform, Vector2 swipeInput)
-        {
-            var perspectiveForward = cameraTransform.forward.normalized;
-            var perspectiveRight = cameraTransform.right.normalized;
-            return perspectiveForward * swipeInput.y + perspectiveRight * swipeInput.x;
-        }
-        public Camera Camera { get; set; }
         [SerializeField] private Vector3 direction = Vector3.zero;
         [SerializeField] private NavMeshAgent agent;
+
+        public Camera Camera { get; set; }
+
         private void Start()
         {
             agent ??= GetComponent<NavMeshAgent>();
@@ -36,6 +32,12 @@ namespace MonoBehaviors.Player
 
             var directionFromCameraPerspective = DirectionFromCameraPerspective(Camera.transform, normalizedDirection);
             direction = directionFromCameraPerspective;
+        }
+        public static Vector3 DirectionFromCameraPerspective(Transform cameraTransform, Vector2 swipeInput)
+        {
+            var perspectiveForward = cameraTransform.forward.normalized;
+            var perspectiveRight = cameraTransform.right.normalized;
+            return perspectiveForward * swipeInput.y + perspectiveRight * swipeInput.x;
         }
     }
 }

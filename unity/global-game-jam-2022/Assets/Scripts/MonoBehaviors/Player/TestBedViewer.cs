@@ -13,18 +13,12 @@ namespace MonoBehaviors.Player
             Camera ??= new GameObject().AddComponent<Camera>();
         }
 
-        private void OnEnable()
-        {
-            InputManager.SwipeOccurred += HandleSwipe;
-        }
+        private void OnEnable() => InputManager.SwipeOccurred += HandleSwipe;
+
+        private void OnDisable() => InputManager.SwipeOccurred -= HandleSwipe;
         private void HandleSwipe(Swipe swipe)
         {
             // Move camera
-        }
-
-        private void OnDisable()
-        {
-            InputManager.SwipeOccurred -= HandleSwipe;
         }
     }
 }

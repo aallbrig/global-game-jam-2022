@@ -12,11 +12,12 @@ namespace Tests.PlayMode.Input
     [RequireComponent(typeof(BoxCollider))]
     public class SpyPlayerInteractableObject : MonoBehaviour, IPlayerInteractable {}
 
-    public class SpyLocomotion: ILocomotion
+    public class SpyLocomotion : ILocomotion
     {
         public Action<Vector2> OnConstantLocomotion;
         public void ConstantLocomotion(Vector2 normalizedDirection) => OnConstantLocomotion?.Invoke(normalizedDirection);
     }
+
     public class SpyPlayerServices : IPlayerVerbProvider
     {
         public Action<Ray> OnDetectInteractable;

@@ -6,6 +6,7 @@ namespace MonoBehaviors.Player
     {
         public void ConstantLocomotion(Vector2 normalizedDirection);
     }
+
     public interface IPlayerVerbProvider
     {
         public void Interact(IPlayerInteractable playerInteractable);
