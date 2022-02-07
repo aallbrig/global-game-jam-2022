@@ -14,11 +14,16 @@ namespace Tests.PlayMode.PrefabTests
         private const string TestPlatform = "Prefabs/Test Platform";
 
         [UnityTest]
+        public IEnumerator PlayerPrefab_HasAShootyPoint() {
+            var testLocation = TestLocation.Next();
+            yield return null;
+        }
+        
+        [UnityTest]
         public IEnumerator PlayerPrefab_RespondsToDownwardSwipe()
         {
             var testLocation = TestLocation.Next();
-            var floor = Object.Instantiate(Resources.Load<GameObject>(TestPlatform), testLocation);
-            floor.GetComponent<NavMeshSurface>().BuildNavMesh();
+            Object.Instantiate(Resources.Load<GameObject>(TestPlatform), testLocation);
             var sut = Object.Instantiate(Resources.Load<GameObject>(PrefabLocation), testLocation);
 
             InputSystem.AddDevice<Touchscreen>();
