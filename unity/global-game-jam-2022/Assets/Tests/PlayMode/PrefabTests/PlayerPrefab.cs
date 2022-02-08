@@ -2,7 +2,6 @@ using System.Collections;
 using NUnit.Framework;
 using Tests.PlayMode.Utilities;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.TestTools;
 
@@ -12,6 +11,7 @@ namespace Tests.PlayMode.PrefabTests
     {
         private const string PrefabLocation = "Prefabs/Player";
         private const string TestPlatform = "Prefabs/Test Platform";
+        private const string TestCombatant = "Prefabs/Test Combatant";
 
         [UnityTest]
         public IEnumerator PlayerPrefab_HasAShootyPoint() {

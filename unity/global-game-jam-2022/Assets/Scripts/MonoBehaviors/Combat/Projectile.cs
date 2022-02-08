@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Combat.MonoBehaviours
+namespace MonoBehaviors.Combat
 {
     public class Projectile : MonoBehaviour
     {

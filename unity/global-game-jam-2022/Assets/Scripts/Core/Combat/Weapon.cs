@@ -1,5 +1,9 @@
 namespace Core.Combat
 {
+    public interface WeaponConfiguration
+    {
+        
+    }
     public class Weapon
     {
         private readonly Ammunition _ammo;
