@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using Tests.PlayMode.Utilities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.SceneTests
@@ -24,11 +25,10 @@ namespace Tests.PlayMode.SceneTests
             string gameObjectName
         )
         {
-            yield return SceneLoader.LoadTargetScene(TargetScene);
+            Scene sut;
+            yield return SceneLoader.LoadTargetScene(TargetScene, scene => sut = scene);
 
-            var sut = FindGameObjectByName(gameObjectName);
-
-            Assert.NotNull(sut);
+            Assert.NotNull(GameObject.Find(gameObjectName));
         }
     }
 }

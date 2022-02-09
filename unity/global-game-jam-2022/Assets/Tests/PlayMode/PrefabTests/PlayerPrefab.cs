@@ -1,4 +1,5 @@
 using System.Collections;
+using Core.Environment;
 using NUnit.Framework;
 using Tests.PlayMode.Utilities;
 using UnityEngine;
@@ -7,11 +8,12 @@ using UnityEngine.TestTools;
 
 namespace Tests.PlayMode.PrefabTests
 {
-    public class PlayerPrefab : InputTestFixture
+    public class PlayerPrefab : InputTestFixture, IExaminePrefabs
     {
-        private const string PrefabLocation = "Prefabs/Player";
         private const string TestPlatform = "Prefabs/Test Platform";
         private const string TestCombatant = "Prefabs/Test Combatant";
+
+        [UnityTest] public IEnumerator Prefab_Exists() => PrefabTester.PrefabExists(this);
 
         [UnityTest]
         public IEnumerator PlayerPrefab_HasAShootyPoint() {
@@ -40,5 +42,7 @@ namespace Tests.PlayMode.PrefabTests
 
             Assert.IsTrue(Vector3.Distance(positionA, positionB) > 0);
         }
+
+        public string PrefabLocation => "Prefabs/Player";
     }
 }
