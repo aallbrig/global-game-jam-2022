@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.andrewallbright.ai": "https://github.com/aallbrig/andrewallbright-unity-ai.git?path=/unity/andrewallbright-unity-ai/Packages/com.andrewallbright.ai",
+    "com.allbright.ai": "https://github.com/aallbrig/allbright-unity-ai.git?path=/unity/allbright-unity-ai/Packages/com.allbright.ai",
     "com.unity.cinemachine": "2.6.11",
     "com.unity.collab-proxy": "1.15.7",
     "com.unity.device-simulator": "3.0.3-preview",
