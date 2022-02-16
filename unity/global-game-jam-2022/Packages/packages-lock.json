@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.andrewallbright.ai": {
+      "version": "https://github.com/aallbrig/andrewallbright-unity-ai.git?path=/unity/andrewallbright-unity-ai/Packages/com.andrewallbright.ai",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "708c446b296e3ef9749461b5edb300fb66602a99"
+    },
     "com.unity.cinemachine": {
       "version": "2.6.11",
       "depth": 0,
